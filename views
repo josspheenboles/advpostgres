@@ -1,0 +1,50 @@
+==Key Features of PostgreSQL Views
+	--Query Simplification
+		complex joins and calculations
+		users to work with simpler interfaces
+	--Security
+		Restrict access to specific columns or rows
+	--Updatable Views
+		Some views can be updated (INSERT/UPDATE/DELETE)
+		Requirements:
+			View must have a single table in its FROM clause
+			Cannot contain DISTINCT, GROUP BY, HAVING, etc.
+			Must include all columns with NOT NULL constraints
+==Regular Views(simple)
+	Act as saved queries that are executed each time the view is referenced
+	CREATE VIEW active_customers 
+	AS
+	SELECT id, name, email FROM customers WHERE is_active = true
+	;
+==Materialized Views
+	Store the query results physically and can be refreshed
+	Improve performance for complex queries that don't require real-time data
+	CREATE MATERIALIZED VIEW monthly_sales 
+	AS
+		SELECT date_trunc('month', order_date) AS month, 
+		       SUM(amount) AS total_sales
+		FROM orders
+		GROUP BY month;
+	--drop view) and create it
+		
+	REFRESH MATERIALIZED VIEW monthly_sales;
+==Create a view:
+	CREATE VIEW view_name 
+	AS 
+	query;
+==Replace a view:
+	CREATE OR REPLACE VIEW view_name 
+	AS 
+	new_query;
+==DROP VIEW
+	DROP VIEW [IF EXISTS] view_name;
+==View metadata:
+	-- List all views
+		SELECT * FROM information_schema.views;
+	-- View definition
+		SELECT definition FROM pg_views WHERE viewname = 'view_name';
+==Performance Considerations
+	--Views don't inherently improve performance (except materialized views)
+	--Complex views can slow down queries if not optimized
+	--PostgreSQL's query planner can often optimize queries through views
+	--Use EXPLAIN to analyze view query performance

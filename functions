@@ -1,0 +1,25 @@
+==functions
+	PostgreSQL functions are reusable blocks of code that perform specific operations. They can be written in multiple languages and offer powerful capabilities for data manipulation and application logic.
+==Types of Functions in PostgreSQL
+	--Built-in Functions
+		PostgreSQL comes with hundreds of predefined functions:
+		Mathematical functions: ABS(), ROUND(), RANDOM()
+		String functions: LOWER(), SUBSTRING(), CONCAT()
+		Date/time functions: NOW(), DATE_TRUNC(), AGE()
+		Aggregate functions: SUM(), AVG(), COUNT(), ARRAY_AGG()
+		Window functions: ROW_NUMBER(), RANK(), LAG()
+		
+				
+	--User-Defined Functions (UDFs)
+		--simplest form
+			CREATE FUNCTION add_numbers(a integer, b integer) 
+			RETURNS integer AS $$
+			    SELECT a + b;
+			$$ LANGUAGE SQL;
+		--native procedural language
+		CREATE FUNCTION get_customer_orders(customer_id int) 
+		RETURNS SETOF orders AS $$
+		BEGIN
+		    RETURN QUERY SELECT * FROM orders WHERE customer_id = $1;
+		END;
+		$$ LANGUAGE plpgsql;
